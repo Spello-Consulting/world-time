@@ -132,6 +132,12 @@ xcrun notarytool submit "dist/World Time-1.0.0.dmg" \
 xcrun stapler staple "dist/World Time-1.0.0.dmg"
 ```
 
+### Verify the version and build number
+
+```bash
+PKG=$(ls dist/mas-arm64/*.pkg | head -1); TMP=$(mktemp -d); pkgutil --expand "$PKG" "$TMP/x" >/dev/null; echo "version: $(xmllint --xpath 'string(//bundle-version/bundle/@CFBundleShortVersionString)' "$TMP/x/Distribution")  build: $(xmllint --xpath 'string(//bundle-version/bundle/@CFBundleVersion)' "$TMP/x/Distribution")"; rm -rf "$TMP"
+```
+
 ## Project layout
 
 ```

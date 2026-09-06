@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+/* Dark mode is driven by a `.dark` class on <html> (set from prefers-color-scheme
+   at load and kept in sync with the native theme source by useTheme). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ── Color seeds (space-separated RGB so we can apply alpha) ───────────── */
+:root {
+  color-scheme: light;
+  --fg: 28 28 30;
+  --accent: 19 138 242;
+  --green: 22 128 92;
+  --yellow: 210 130 0;
+  --blue: 19 138 242;
+}
+
+:root.dark {
+  color-scheme: dark;
+  --fg: 245 245 247;
+  --accent: 59 158 255;
+  --green: 61 214 140;
+  --yellow: 245 196 81;
+  --blue: 92 174 255;
+}
+
+/* ── Design tokens → Tailwind utilities (inline so the seeds above cascade) ─ */
+@theme inline {
+  --color-primary: rgb(var(--fg));
+  --color-secondary: rgb(var(--fg) / 0.6);
+  --color-tertiary: rgb(var(--fg) / 0.44);
+  --color-quaternary: rgb(var(--fg) / 0.26);
+  --color-accent: rgb(var(--accent));
+
+  --color-separator: rgb(var(--fg) / 0.12);
+  --color-control: rgb(var(--fg) / 0.09);
+  --color-control-subtle: rgb(var(--fg) / 0.05);
+  --color-control-active: rgb(var(--fg) / 0.16);
+  --color-list-hover: rgb(var(--fg) / 0.05);
+  --color-list-selection: rgb(var(--fg) / 0.1);
+  --color-input: rgb(var(--fg) / 0.05);
+
+  --color-support-red: rgb(190 40 40);
+  --color-support-green: rgb(var(--green));
+  --color-support-yellow: rgb(var(--yellow));
+  --color-support-blue: rgb(var(--blue));
+
+  --radius-card: 12px;
+
+  --text-mini: 0.6875rem;
+  --text-small: 0.75rem;
+}
+
+/* ── App chrome ───────────────────────────────────────────────────────── */
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+  font-size: 14px;
+  color: rgb(var(--fg));
+  /* Translucent so the window vibrancy shows through (frosted look). */
+  background: rgb(255 255 255 / 0.72);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+:root.dark body {
+  background: rgb(30 30 32 / 0.5);
+}
+
+/* Native window dragging: the toolbar/top strip drags, interactive bits don't. */
+.region-drag {
+  -webkit-app-region: drag;
+}
+.region-no-drag,
+.region-drag :is(button, a, input, select, textarea, [role="tablist"], [role="button"]) {
+  -webkit-app-region: no-drag;
+}
+
+/* Thin, unobtrusive scrollbars to match the macOS overlay style. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--fg) / 0.25) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgb(var(--fg) / 0.22);
+  border-radius: 9999px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}

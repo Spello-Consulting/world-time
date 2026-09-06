@@ -1,0 +1,50 @@
+{
+  "name": "world-time",
+  "version": "1.0.0",
+  "description": "Track time and plan meetings across time zones",
+  "author": "Spello Consulting",
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "./out/main/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "start": "electron-vite preview",
+    "type-check:node": "tsc -p tsconfig.node.json --noEmit",
+    "type-check:web": "tsc -p tsconfig.web.json --noEmit",
+    "type-check": "npm run type-check:node && npm run type-check:web",
+    "build": "npm run type-check && electron-vite build",
+    "package:dir": "npm run build && electron-builder --dir",
+    "package:dmg": "npm run build && electron-builder --mac dmg",
+    "package:mas": "npm run build && electron-builder --mac mas"
+  },
+  "dependencies": {
+    "@radix-ui/colors": "^3.0.0",
+    "@tanstack/react-query": "^5.87.4",
+    "@tanstack/react-router": "^1.131.36",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.542.0",
+    "radix-ui": "^1.4.3",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "sonner": "^2.0.3",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.2.2",
+    "@types/node": "^24.3.1",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.0",
+    "electron": "^35.0.0",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^4.0.0",
+    "tailwindcss": "^4.2.2",
+    "typescript": "^5.5.3",
+    "vite": "^7.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

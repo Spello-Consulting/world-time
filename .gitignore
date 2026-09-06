@@ -1,0 +1,29 @@
+# Dependencies & build output
+node_modules/
+out/
+dist/
+.vite/
+
+# TypeScript incremental build info
+*.tsbuildinfo
+
+# Logs
+*.log
+
+# macOS
+.DS_Store
+
+# Local, machine-specific tooling config (launch.json stays tracked)
+.claude/settings.local.json
+
+# Secrets & code-signing material — never commit these
+.env
+.env.*
+*.p12
+*.pem
+*.cer
+*.p8
+*.mobileprovision
+*.provisionprofile
+*.certSigningRequest
+build/embedded.provisionprofile

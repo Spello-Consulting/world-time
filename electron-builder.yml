@@ -1,0 +1,52 @@
+appId: com.spelloconsulting.worldtime
+productName: World Time
+copyright: Copyright © 2026 Spello Consulting
+
+directories:
+  buildResources: build
+  output: dist
+
+# Only ship the compiled output and production node_modules.
+files:
+  - out/**/*
+  - "!**/*.map"
+
+# electron-vite emits to out/; main entry is out/main/index.js (see package.json "main").
+asar: true
+
+mac:
+  category: public.app-category.productivity
+  icon: build/icon.icns
+  # Modern minimum; adjust if you need to support older macOS.
+  minimumSystemVersion: "11.0"
+  darkModeSupport: true
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
+  extendInfo:
+    LSApplicationCategoryType: public.app-category.productivity
+    NSHumanReadableCopyright: Copyright © 2026 Spello Consulting
+
+# Local, notarizable build for testing outside the store.
+dmg:
+  title: ${productName} ${version}
+  artifactName: ${productName}-${version}.${ext}
+
+# Mac App Store build.
+mas:
+  category: public.app-category.productivity
+  icon: build/icon.icns
+  hardenedRuntime: false
+  # Pin the app-signing certificate so electron-builder never falls back to the
+  # Apple Development cert for a store build. The .pkg installer is signed with
+  # the matching "3rd Party Mac Developer Installer" cert, which is auto-detected.
+  identity: "Apple Distribution: SPELLO CONSULTING PTY LTD (68HM5882RN)"
+  entitlements: build/entitlements.mas.plist
+  entitlementsInherit: build/entitlements.mas.inherit.plist
+  # Provisioning profile from the Apple Developer portal (Mac App Store type).
+  provisioningProfile: build/embedded.provisionprofile
+
+# For a signed DMG you can notarize with notarytool (see README).
+# afterSign hooks for notarization are intentionally omitted so an unsigned
+# `--dir` / `dmg` build works without an Apple account during development.

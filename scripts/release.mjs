@@ -56,19 +56,21 @@ function marketingVersion() {
   return pkg.version;
 }
 
-/** Next build number. Increments and persists the counter unless `write` is false. */
-function nextBuildNumber(write) {
-  const current = existsSync(buildNumberFile)
+/** Read the current counter (0 if unset); the next build number is this + 1. */
+function currentBuildNumber() {
+  return existsSync(buildNumberFile)
     ? parseInt(readFileSync(buildNumberFile, "utf8").trim(), 10) || 0
     : 0;
-  const next = current + 1;
-  if (write) writeFileSync(buildNumberFile, `${next}\n`);
-  return next;
 }
 
 const printOnly = process.env.RELEASE_PRINT_ONLY === "1";
 const version = process.env.APP_VERSION || marketingVersion();
-const build = process.env.BUILD_NUMBER || String(nextBuildNumber(!printOnly));
+
+// When BUILD_NUMBER is provided we use it verbatim and never touch the counter.
+// Otherwise we compute the next value but only persist it after a successful
+// build, so a failed package run doesn't burn a build number.
+const overridden = !!process.env.BUILD_NUMBER;
+const build = process.env.BUILD_NUMBER || String(currentBuildNumber() + 1);
 
 console.log(`[release] target=${target} version=${version} build=${build}`);
 
@@ -79,3 +81,6 @@ execFileSync(
   [...targetArgs, `-c.extraMetadata.version=${version}`, `-c.buildVersion=${build}`],
   { cwd: root, stdio: "inherit" },
 );
+
+// Only reached when electron-builder exits 0.
+if (!overridden) writeFileSync(buildNumberFile, `${build}\n`);

@@ -38,10 +38,11 @@ mas:
   category: public.app-category.productivity
   icon: build/icon.icns
   hardenedRuntime: false
-  # Pin the app-signing certificate so electron-builder never falls back to the
-  # Apple Development cert for a store build. The .pkg installer is signed with
-  # the matching "3rd Party Mac Developer Installer" cert, which is auto-detected.
-  identity: "Apple Distribution: SPELLO CONSULTING PTY LTD (68HM5882RN)"
+  # Do NOT pin `identity` here: electron-builder reuses the app identity string as
+  # the name filter when it looks up the "3rd Party Mac Developer Installer" cert
+  # for the .pkg (macPackager: findIdentity(certType, mas.identity)). Pinning the
+  # app cert makes that installer lookup search for an installer cert with the app
+  # cert's name and fail. Auto-discovery selects the correct app + installer certs.
   entitlements: build/entitlements.mas.plist
   entitlementsInherit: build/entitlements.mas.inherit.plist
   # Provisioning profile from the Apple Developer portal (Mac App Store type).

@@ -2,13 +2,9 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-  <!-- Mac App Store: the app sandbox is mandatory. -->
+  <!-- Mac App Store: the app sandbox is mandatory. This single-window app needs
+       no other entitlements (no network, file access, app groups, etc.). -->
   <key>com.apple.security.app-sandbox</key>
   <true/>
-  <!-- Required for the signed app to launch under the store's certificate. -->
-  <key>com.apple.security.application-groups</key>
-  <array>
-    <string>com.spelloconsulting.worldtime</string>
-  </array>
 </dict>
 </plist>

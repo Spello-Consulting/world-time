@@ -61,9 +61,21 @@ npm run package:mas     # → version 1.0.1, next build number, signed .pkg
 git add build/build-number.txt && git commit -m "Build 1.0.1"   # persist the counter
 ```
 
+### Verify the version and build number
+
+```bash
+PKG=$(ls dist/mas-arm64/*.pkg | head -1); TMP=$(mktemp -d); pkgutil --expand "$PKG" "$TMP/x" >/dev/null; echo "version: $(xmllint --xpath 'string(//bundle-version/bundle/@CFBundleShortVersionString)' "$TMP/x/Distribution")  build: $(xmllint --xpath 'string(//bundle-version/bundle/@CFBundleVersion)' "$TMP/x/Distribution")"; rm -rf "$TMP"
+```
+
 Preview what would be stamped without building: `npm run release:info`.
 Overrides (CI / one-offs): `APP_VERSION=1.2.3` forces the version; `BUILD_NUMBER=42` forces the
 build number without touching the counter.
+
+### Verify the code signing entitlements
+
+```bash
+ENT=$(codesign -d --entitlements :- "dist/mas-arm64/World Time.app" 2>/dev/null); echo "$ENT" | xmllint --format -; echo "$ENT" | grep -Eq '<string>com\.spelloconsulting\.worldtime</string>' && echo "❌ FAIL: bare (non-team-prefixed) app group present" || echo "✅ PASS: no malformed app group — OK to upload"
+```
 
 ## Submitting to the Mac App Store
 
@@ -132,11 +144,6 @@ xcrun notarytool submit "dist/World Time-1.0.0.dmg" \
 xcrun stapler staple "dist/World Time-1.0.0.dmg"
 ```
 
-### Verify the version and build number
-
-```bash
-PKG=$(ls dist/mas-arm64/*.pkg | head -1); TMP=$(mktemp -d); pkgutil --expand "$PKG" "$TMP/x" >/dev/null; echo "version: $(xmllint --xpath 'string(//bundle-version/bundle/@CFBundleShortVersionString)' "$TMP/x/Distribution")  build: $(xmllint --xpath 'string(//bundle-version/bundle/@CFBundleVersion)' "$TMP/x/Distribution")"; rm -rf "$TMP"
-```
 
 ## Project layout
 

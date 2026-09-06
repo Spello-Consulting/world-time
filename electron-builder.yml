@@ -17,8 +17,9 @@ asar: true
 mac:
   category: public.app-category.productivity
   icon: build/icon.icns
-  # Modern minimum; adjust if you need to support older macOS.
-  minimumSystemVersion: "11.0"
+  # 12.0+ is required to ship an arm64-only build (Apple silicon). Below 12.0,
+  # the Mac App Store demands a universal x86_64+arm64 binary. Raise as needed.
+  minimumSystemVersion: "12.0"
   darkModeSupport: true
   hardenedRuntime: true
   gatekeeperAssess: false

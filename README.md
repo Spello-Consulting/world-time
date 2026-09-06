@@ -42,6 +42,29 @@ npm run package:dir   # unpacked .app only (fastest; for a quick local run) → 
 
 A `--dir` or unsigned `dmg` build works with no Apple account, for local testing.
 
+### Versioning & build numbers
+
+`scripts/release.mjs` stamps each build automatically (all three `package:*` scripts go through it):
+
+- **Marketing version** (`CFBundleShortVersionString`) = the most recent git tag reachable from HEAD,
+  with a leading `v` stripped (`v1.2.3` → `1.2.3`). Falls back to `package.json`'s version if there
+  are no tags.
+- **Build number** (`CFBundleVersion`) = a monotonic counter in `build/build-number.txt` that
+  increments on every run, so every upload — including a re-upload of the same version — gets a
+  unique, higher build number. **Commit this file** so the counter stays monotonic across machines.
+
+Normal release flow:
+
+```bash
+git tag v1.0.1          # tag the release commit
+npm run package:mas     # → version 1.0.1, next build number, signed .pkg
+git add build/build-number.txt && git commit -m "Build 1.0.1"   # persist the counter
+```
+
+Preview what would be stamped without building: `npm run release:info`.
+Overrides (CI / one-offs): `APP_VERSION=1.2.3` forces the version; `BUILD_NUMBER=42` forces the
+build number without touching the counter.
+
 ## Submitting to the Mac App Store
 
 The Electron app is submitted the same way any Mac App Store binary is — with your Apple
@@ -59,6 +82,11 @@ Developer identity. Xcode's toolchain provides the signing certificates and the 
      `build/embedded.provisionprofile` (the path `electron-builder.yml` expects).
 3. In [App Store Connect](https://appstoreconnect.apple.com), create a new **macOS app** record and
    set its bundle id to `com.spelloconsulting.worldtime`.
+4. Make sure you have a Mac Installer Distribution Certificate installed
+   - Xcode → Settings → Accounts → select your Apple ID / the SPELLO CONSULTING team.
+   - Click Manage Certificates…
+   - Click the ➕ and choose Mac Installer Distribution.
+   - Done — it installs straight into your keychain.
 
 ### 2. Build the signed `.pkg`
 
@@ -77,6 +105,8 @@ command-line uploader:
 
 ```bash
 # Option A — Transporter.app: drag the .pkg in and Deliver.
+# Install from https://apps.apple.com/au/app/transporter/id1450874784?mt=12 if not yet installed
+
 
 # Option B — command line (uses an App Store Connect API key or app-specific password):
 xcrun altool --upload-app -f "dist/World Time-1.0.0.pkg" -t macos \

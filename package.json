@@ -14,9 +14,10 @@
     "type-check:web": "tsc -p tsconfig.web.json --noEmit",
     "type-check": "npm run type-check:node && npm run type-check:web",
     "build": "npm run type-check && electron-vite build",
-    "package:dir": "npm run build && electron-builder --dir",
-    "package:dmg": "npm run build && electron-builder --mac dmg",
-    "package:mas": "npm run build && electron-builder --mac mas"
+    "package:dir": "npm run build && node scripts/release.mjs dir",
+    "package:dmg": "npm run build && node scripts/release.mjs dmg",
+    "package:mas": "npm run build && node scripts/release.mjs mas",
+    "release:info": "RELEASE_PRINT_ONLY=1 node scripts/release.mjs mas"
   },
   "dependencies": {
     "@radix-ui/colors": "^3.0.0",

@@ -8,6 +8,7 @@
   "main": "./out/main/index.js",
   "type": "module",
   "scripts": {
+    "postinstall": "node scripts/ensure-electron.mjs",
     "dev": "electron-vite dev",
     "start": "electron-vite preview",
     "type-check:node": "tsc -p tsconfig.node.json --noEmit",
@@ -17,7 +18,8 @@
     "package:dir": "npm run build && node scripts/release.mjs dir",
     "package:dmg": "npm run build && node scripts/release.mjs dmg",
     "package:mas": "npm run build && node scripts/release.mjs mas",
-    "release:info": "RELEASE_PRINT_ONLY=1 node scripts/release.mjs mas"
+    "release:info": "RELEASE_PRINT_ONLY=1 node scripts/release.mjs mas",
+    "verify:mas": "node scripts/check-signing.mjs"
   },
   "dependencies": {
     "@radix-ui/colors": "^3.0.0",
@@ -47,5 +49,11 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "allowScripts": {
+    "electron@35.7.5": true,
+    "esbuild@0.25.12": true,
+    "esbuild@0.28.2": true,
+    "fsevents@2.3.3": true
   }
 }

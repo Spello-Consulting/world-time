@@ -82,5 +82,17 @@ execFileSync(
   { cwd: root, stdio: "inherit" },
 );
 
-// Only reached when electron-builder exits 0.
+// For Mac App Store builds, verify the signature matches the provisioning
+// profile before treating the build as good. This catches error 90284
+// ("Invalid Code Signing") locally, in seconds, instead of minutes into a
+// Transporter upload. Throws (and so skips the build-number write below) on
+// a mismatch, so a bad build doesn't burn a build number.
+if (target === "mas") {
+  execFileSync(process.execPath, [join(root, "scripts", "check-signing.mjs")], {
+    cwd: root,
+    stdio: "inherit",
+  });
+}
+
+// Only reached when electron-builder (and, for mas, the signing check) succeed.
 if (!overridden) writeFileSync(buildNumberFile, `${build}\n`);

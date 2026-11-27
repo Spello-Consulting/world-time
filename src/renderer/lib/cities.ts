@@ -8,6 +8,7 @@ export interface City {
 
 // A curated list of major cities worldwide with their IANA timezone identifiers.
 export const CITY_DATABASE: City[] = [
+  { id: "utc", name: "UTC", country: "Coordinated Universal Time", tz: "UTC", flag: "🌐" },
   { id: "new-york", name: "New York", country: "United States", tz: "America/New_York", flag: "🇺🇸" },
   { id: "los-angeles", name: "Los Angeles", country: "United States", tz: "America/Los_Angeles", flag: "🇺🇸" },
   { id: "chicago", name: "Chicago", country: "United States", tz: "America/Chicago", flag: "🇺🇸" },

@@ -23,13 +23,15 @@ export function AddCityDialog({
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return CITY_DATABASE;
-    return CITY_DATABASE.filter(
-      (c) =>
-        c.name.toLowerCase().includes(q) ||
-        c.country.toLowerCase().includes(q) ||
-        c.tz.toLowerCase().includes(q),
-    );
+    const matches = q
+      ? CITY_DATABASE.filter(
+          (c) =>
+            c.name.toLowerCase().includes(q) ||
+            c.country.toLowerCase().includes(q) ||
+            c.tz.toLowerCase().includes(q),
+        )
+      : CITY_DATABASE;
+    return [...matches].sort((a, b) => a.name.localeCompare(b.name));
   }, [search]);
 
   const handleAdd = (id: string) => {
